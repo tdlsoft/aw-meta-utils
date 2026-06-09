@@ -1,0 +1,40 @@
+{
+  "name": "web-app",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite --host :: --port 3000",
+    "build": "node tools/generate-llms.js || true && vite build",
+    "preview": "vite preview --host :: --port 3000",
+    "lint": "eslint . --quiet",
+    "lint:warn": "eslint ."
+  },
+  "dependencies": {
+    "@emotion/is-prop-valid": "^1.4.0",
+    "clsx": "^2.1.1",
+    "crypto-js": "^4.2.0",
+    "framer-motion": "^11.15.0",
+    "lucide-react": "^0.469.0",
+    "meta-onboarding": "file:./src/lib/meta-onboarding",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-helmet": "^6.1.0",
+    "react-router-dom": "^7.1.1",
+    "tailwind-merge": "^2.6.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.1",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-react": "^7.37.3",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "globals": "^15.14.0",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "terser": "^5.37.0",
+    "vite": "^4.4.5"
+  }
+}

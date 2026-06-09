@@ -1,0 +1,16 @@
+/*
+  TEMPLATE STYLES: These styles are used as a base template.
+  AI is allowed to modify these styles as needed.
+*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    @apply bg-[#f4f7f9];
+    font-family: 'DM Sans', sans-serif;
+}
+
+html {
+    font-size: 16px; /* increase from default 16px */
+}
