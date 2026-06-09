@@ -1,5 +1,5 @@
 {
-  "name": "meta-utils",
+  "name": "aw-meta-utils",
   "version": "1.0.0",
   "type": "module",
   "description": "Framework-agnostic SDK wrapper for Meta / Facebook Embedded Signup flow",
