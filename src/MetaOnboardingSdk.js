@@ -57,10 +57,7 @@ const FB_API_VERSION = 'v21.0';
 export class MetaOnboardingSdk {
   /** @param {MetaOnboardingHandlers} handlers */
   constructor(handlers = {}) {
-    if (typeof handlers.onSuccess !== 'function') {
-      throw new Error('[meta-onboarding] onSuccess handler must be a function');
-    }
-    this._onSuccess = handlers.onSuccess;
+    this.onTenantOnboardingStarted = handlers.onTenantOnboardingStarted ?? (() => {});
     this._onError = handlers.onError ?? ((err) => console.error('[meta-onboarding]', err));
     this._onCancel = handlers.onCancel ?? (() => { });
   }
