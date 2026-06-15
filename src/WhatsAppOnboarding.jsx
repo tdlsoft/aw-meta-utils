@@ -30,15 +30,15 @@ export const WhatsAppOnboarding = ({ businessCode, businessInfo, isSelfManagedBi
     website: businessInfo.website || 'https://example.com',
     businessEmail: businessInfo.email || '',
     phoneCode: businessInfo.phoneCode || '91',
-    phoneNumber: businessInfo.phoneNo || '1234567890',
+    phoneNumber: businessInfo.phoneNo || '',
     timezone: 'Asia/Calcutta GMT+05:30',
     currency: 'INR',
     companySize: businessInfo.companySize || 'SMALL',
     isSelfManagedBilling: isSelfManagedBilling,
     parentBusinessId: '',  // For child tenants
-    workspaceName: 'General 1',
+    workspaceName: 'Human Resource',
     metaPhoneCode: '91',
-    metaPhoneNumber: '1234567830',
+    metaPhoneNumber: '',
   });
 
   const [loading, setLoading] = useState(false);
