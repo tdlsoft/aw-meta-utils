@@ -129,6 +129,7 @@ const WhatsAppOnboardingHistory = ({ onboardingStatus, onConfigureNew, onCheckSt
               <th className="px-6 py-3 text-left text-sm font-bold">Department Name</th>
               <th className="px-6 py-3 text-left text-sm font-bold">Whatsapp Number</th>
               <th className="px-6 py-3 text-left text-sm font-bold">Status</th>
+              <th className="px-6 py-3 text-left text-sm font-bold">Onboarded Date</th>
               <th className="px-6 py-3 text-right text-sm font-bold">Action</th>
             </tr>
           </thead>
@@ -147,6 +148,7 @@ const WhatsAppOnboardingHistory = ({ onboardingStatus, onConfigureNew, onCheckSt
                       {ws.status}
                     </span>
                   </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{formatDateTime(ws.createdAt ? new Date(ws.createdAt) : null)}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     {ws.status === 'ACTIVE' && (
                       <KebabMenu
@@ -162,7 +164,7 @@ const WhatsAppOnboardingHistory = ({ onboardingStatus, onConfigureNew, onCheckSt
               ))
             ) : (
               <tr>
-                <td colSpan="4" className="px-6 py-8 text-center text-sm text-gray-500">
+                <td colSpan="5" className="px-6 py-8 text-center text-sm text-gray-500">
                   No workspaces found.
                 </td>
               </tr>
