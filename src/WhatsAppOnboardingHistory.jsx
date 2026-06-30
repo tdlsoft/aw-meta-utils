@@ -7,6 +7,12 @@ const formatDateTime = (date) => {
   return `${pad(date.getDate())}-${pad(date.getMonth() + 1)}-${date.getFullYear()} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
 };
 
+const formatDate = (date) => {
+  if (!date) return '—';
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${pad(date.getDate())}-${pad(date.getMonth() + 1)}-${date.getFullYear()}`;
+};
+
 const KebabMenu = ({ businessCode, businessInfo, workspaceInfo, onResumeOnboarding, loading }) => {
   const [open, setOpen] = useState(false);
   const [menuPos, setMenuPos] = useState({ top: 0, left: 0 });
@@ -148,7 +154,7 @@ const WhatsAppOnboardingHistory = ({ onboardingStatus, onConfigureNew, onCheckSt
                       {ws.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{formatDateTime(ws.createdAt ? new Date(ws.createdAt) : null)}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{formatDate(ws.createdAt ? new Date(ws.createdAt) : null)}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     {ws.status === 'ACTIVE' && (
                       <KebabMenu
