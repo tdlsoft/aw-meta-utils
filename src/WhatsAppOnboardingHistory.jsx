@@ -83,7 +83,7 @@ const WhatsAppOnboardingHistory = ({ onboardingStatus, onConfigureNew, onCheckSt
   }, []);
 
   const itemsPerPage = 5;
-  const { businessCode, businessInfo } = onboardingStatus || {};
+  const { businessCode, businessInfo = {} } = onboardingStatus || {};
   const workspaces = onboardingStatus?.workspaces || [];
   const totalPages = Math.ceil(workspaces.length / itemsPerPage);
 
