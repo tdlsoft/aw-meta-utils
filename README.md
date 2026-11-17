@@ -349,6 +349,31 @@ const handlers = {
 };
 ```
 
+### Department Deregistration
+
+Both `MetaOnboardingSdk` and `MetaBspOnboardingSdk` expose
+`unregisterDepartment({ businessCode, workspaceUuid })`. Provide an
+`onUnregisterDepartment` handler so the host application can call its
+authenticated backend endpoint:
+
+```javascript
+const sdk = new MetaOnboardingSdk({
+  onUnregisterDepartment: async ({ businessCode, workspaceUuid }) => {
+    const result = await apiCall('POST', `/v1/businesses/${businessCode}/deregister`, { workspaceUuid });
+    if (!result.success) throw new Error(result.error);
+    return result.data;
+  },
+});
+
+const result = await sdk.unregisterDepartment({
+  businessCode: 'TP1',
+  workspaceUuid: 'workspace-uuid',
+});
+```
+
+The method returns the handler's result and reports then rethrows handler errors
+through `onError`. It also rejects missing identifiers or a missing handler.
+
 ---
 
 ## Examples

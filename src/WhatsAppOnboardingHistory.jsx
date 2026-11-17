@@ -124,7 +124,7 @@ const WhatsAppOnboardingHistory = ({ onboardingStatus, onConfigureNew, onCheckSt
           onClick={onConfigureNew}
           className="px-6 py-3 bg-brand text-white font-semibold rounded-lg hover:bg-brand-dark shadow-sm transition-all disabled:bg-gray-400"
         >
-          Configure New Workspace
+          Configure New Department
         </button>
       </div>
 
@@ -171,7 +171,7 @@ const WhatsAppOnboardingHistory = ({ onboardingStatus, onConfigureNew, onCheckSt
             ) : (
               <tr>
                 <td colSpan="5" className="px-6 py-8 text-center text-sm text-gray-500">
-                  No workspaces found.
+                  No departments found.
                 </td>
               </tr>
             )}

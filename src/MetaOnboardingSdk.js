@@ -11,6 +11,8 @@ const FB_API_VERSION = 'v21.0';
  *   Called when an error occurs (SDK load failure, invalid config, FB.login error).
  * @property {() => void} [onCancel]
  *   Called when the user closes the Meta signup dialog without completing it.
+ * @property {(params: { businessCode: string, workspaceUuid: string }) => Promise<*>} [onUnregisterDepartment]
+ *   Performs department deregistration through the host app's authenticated API client.
  */
 
 /**
@@ -58,8 +60,36 @@ export class MetaOnboardingSdk {
   /** @param {MetaOnboardingHandlers} handlers */
   constructor(handlers = {}) {
     this.onTenantOnboardingStarted = handlers.onTenantOnboardingStarted ?? (() => {});
+    this._onUnregisterDepartment = handlers.onUnregisterDepartment;
     this._onError = handlers.onError ?? ((err) => console.error('[meta-onboarding]', err));
     this._onCancel = handlers.onCancel ?? (() => { });
+  }
+
+  /**
+   * Delegate department deregistration to the host app's authenticated API client.
+   * @param {{ businessCode: string, workspaceUuid: string }} params
+   * @returns {Promise<*>}
+   */
+  async unregisterDepartment(params = {}) {
+    const { businessCode, workspaceUuid } = params || {};
+    if (!businessCode || !workspaceUuid) {
+      const error = new Error('[meta-onboarding] unregisterDepartment() requires { businessCode, workspaceUuid }');
+      this._onError(error);
+      throw error;
+    }
+
+    if (typeof this._onUnregisterDepartment !== 'function') {
+      const error = new Error('[meta-onboarding] onUnregisterDepartment handler is required to unregister a department');
+      this._onError(error);
+      throw error;
+    }
+
+    try {
+      return await this._onUnregisterDepartment({ businessCode, workspaceUuid });
+    } catch (error) {
+      this._onError(error);
+      throw error;
+    }
   }
 
   /**
