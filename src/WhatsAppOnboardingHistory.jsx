@@ -13,7 +13,7 @@ const formatDate = (date) => {
   return `${pad(date.getDate())}-${pad(date.getMonth() + 1)}-${date.getFullYear()}`;
 };
 
-const KebabMenu = ({ businessCode, businessInfo, workspaceInfo, onResumeOnboarding, loading }) => {
+const KebabMenu = ({ businessCode, businessInfo, workspaceInfo, onResumeOnboarding, onUnsubscribeWorkspace, loading }) => {
   const [open, setOpen] = useState(false);
   const [menuPos, setMenuPos] = useState({ top: 0, left: 0 });
   const triggerRef = useRef(null);
@@ -61,20 +61,31 @@ const KebabMenu = ({ businessCode, businessInfo, workspaceInfo, onResumeOnboardi
           style={{ position: 'fixed', top: menuPos.top, left: menuPos.left, zIndex: 9999 }}
           className="w-38 bg-white border border-gray-200 rounded-lg shadow-lg py-1"
         >
-          <button
-            onClick={() => { onResumeOnboarding({ businessCode, businessInfo, workspaceInfo }); setOpen(false); }}
-            disabled={loading}
-            className="w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors"
-          >
-            {loading ? 'Processing…' : 'Resume Onboarding'}
-          </button>
+          {onResumeOnboarding && (
+            <button
+              onClick={() => { onResumeOnboarding({ businessCode, businessInfo, workspaceInfo }); setOpen(false); }}
+              disabled={loading}
+              className="w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors"
+            >
+              {loading ? 'Processing…' : 'Resume Onboarding'}
+            </button>
+          )}
+          {onUnsubscribeWorkspace && (
+            <button
+              onClick={() => { onUnsubscribeWorkspace(workspaceInfo); setOpen(false); }}
+              disabled={loading}
+              className="w-full text-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 disabled:opacity-50 transition-colors"
+            >
+              {loading ? 'Processing…' : 'Unsubscribe'}
+            </button>
+          )}
         </div>
       )}
     </>
   );
 };
 
-const WhatsAppOnboardingHistory = ({ onboardingStatus, onConfigureNew, onCheckStatus, onResumeOnboarding, loading }) => {
+const WhatsAppOnboardingHistory = ({ onboardingStatus, onConfigureNew, onCheckStatus, onResumeOnboarding, onUnsubscribeWorkspace, loading }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [lastRefreshed, setLastRefreshed] = useState(() => new Date());
 
@@ -142,7 +153,7 @@ const WhatsAppOnboardingHistory = ({ onboardingStatus, onConfigureNew, onCheckSt
           <tbody className="bg-white divide-y divide-gray-200">
             {currentItems.length > 0 ? (
               currentItems.map((ws, idx) => (
-                <tr key={ws.workspaceId || idx} className="hover:bg-gray-50">
+                <tr key={ws.uuid || ws.workspaceId || idx} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{ws.name}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{`+${ws.metaPhoneNo?.code || ''} ${ws.metaPhoneNo?.phoneNo || ''}`}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -156,7 +167,17 @@ const WhatsAppOnboardingHistory = ({ onboardingStatus, onConfigureNew, onCheckSt
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{formatDate(ws.createdAt ? new Date(ws.createdAt) : null)}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    {ws.status !== 'VERIFIED' && ws.status !== 'ACTIVE' && (
+                    {(ws.status === 'VERIFIED' || ws.status === 'ACTIVE') ? (
+                      onUnsubscribeWorkspace ? (
+                      <KebabMenu
+                        workspaceInfo={ws}
+                        businessCode={businessCode}
+                        businessInfo={businessInfo}
+                        onUnsubscribeWorkspace={onUnsubscribeWorkspace}
+                        loading={loading}
+                      />
+                      ) : null
+                    ) : (
                       <KebabMenu
                         workspaceInfo={ws}
                         businessCode={businessCode}
