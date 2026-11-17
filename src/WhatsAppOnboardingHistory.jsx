@@ -13,7 +13,7 @@ const formatDate = (date) => {
   return `${pad(date.getDate())}-${pad(date.getMonth() + 1)}-${date.getFullYear()}`;
 };
 
-const KebabMenu = ({ businessCode, businessInfo, workspaceInfo, onResumeOnboarding, onUnsubscribeWorkspace, loading }) => {
+const KebabMenu = ({ businessCode, businessInfo, workspaceInfo, onResumeOnboarding, onDeregisterWorkspace, loading }) => {
   const [open, setOpen] = useState(false);
   const [menuPos, setMenuPos] = useState({ top: 0, left: 0 });
   const triggerRef = useRef(null);
@@ -70,13 +70,13 @@ const KebabMenu = ({ businessCode, businessInfo, workspaceInfo, onResumeOnboardi
               {loading ? 'Processing…' : 'Resume Onboarding'}
             </button>
           )}
-          {onUnsubscribeWorkspace && (
+          {onDeregisterWorkspace && (
             <button
-              onClick={() => { onUnsubscribeWorkspace(workspaceInfo); setOpen(false); }}
+              onClick={() => { onDeregisterWorkspace(workspaceInfo); setOpen(false); }}
               disabled={loading}
               className="w-full text-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 disabled:opacity-50 transition-colors"
             >
-              {loading ? 'Processing…' : 'Unsubscribe'}
+              {loading ? 'Processing…' : 'Deregister'}
             </button>
           )}
         </div>
@@ -85,7 +85,7 @@ const KebabMenu = ({ businessCode, businessInfo, workspaceInfo, onResumeOnboardi
   );
 };
 
-const WhatsAppOnboardingHistory = ({ onboardingStatus, onConfigureNew, onCheckStatus, onResumeOnboarding, onUnsubscribeWorkspace, loading }) => {
+const WhatsAppOnboardingHistory = ({ onboardingStatus, onConfigureNew, onCheckStatus, onResumeOnboarding, onDeregisterWorkspace, loading }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [lastRefreshed, setLastRefreshed] = useState(() => new Date());
 
@@ -168,12 +168,12 @@ const WhatsAppOnboardingHistory = ({ onboardingStatus, onConfigureNew, onCheckSt
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{formatDate(ws.createdAt ? new Date(ws.createdAt) : null)}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     {(ws.status === 'VERIFIED' || ws.status === 'ACTIVE') ? (
-                      onUnsubscribeWorkspace ? (
+                      onDeregisterWorkspace ? (
                       <KebabMenu
                         workspaceInfo={ws}
                         businessCode={businessCode}
                         businessInfo={businessInfo}
-                        onUnsubscribeWorkspace={onUnsubscribeWorkspace}
+                        onDeregisterWorkspace={onDeregisterWorkspace}
                         loading={loading}
                       />
                       ) : null

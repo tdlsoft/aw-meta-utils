@@ -21,7 +21,7 @@ const TIMEZONES = [
  * 3. Onboarding History (Workspace List)
  * Logic and state orchestration for the WhatsApp onboarding flow.
  */
-export const WhatsAppOnboarding = ({ businessCode, businessInfo, isSelfManagedBilling, onTriggerOnboardingFlow, getOnboardingStatus, onUnsubscribeWorkspace }) => {
+export const WhatsAppOnboarding = ({ businessCode, businessInfo, isSelfManagedBilling, onTriggerOnboardingFlow, getOnboardingStatus, onDeregisterWorkspace }) => {
   // Start with a loading state to check for existing workspaces
   const [currentStep, setCurrentStep] = useState('loading');
   const [formData, setFormData] = useState({
@@ -301,17 +301,17 @@ export const WhatsAppOnboarding = ({ businessCode, businessInfo, isSelfManagedBi
     }
   };
 
-  const handleUnsubscribeWorkspace = async (workspaceInfo) => {
-    if (!onUnsubscribeWorkspace) return;
+  const handleDeregisterWorkspace = async (workspaceInfo) => {
+    if (!onDeregisterWorkspace) return;
     setLoading(true);
     setError(null);
     setSuccess(null);
 
     try {
-      const result = await onUnsubscribeWorkspace(workspaceInfo);
+      const result = await onDeregisterWorkspace(workspaceInfo);
       if (result?.cancelled) return;
       if (result?.success === false || !['DEREGISTERED', 'ALREADY_DEREGISTERED'].includes(result?.status)) {
-        throw new Error(result?.error || 'Failed to unsubscribe workspace');
+        throw new Error(result?.error || 'Failed to deregister workspace');
       }
 
       setOnboardingStatus((prev) => ({
@@ -320,9 +320,9 @@ export const WhatsAppOnboarding = ({ businessCode, businessInfo, isSelfManagedBi
           workspace.uuid === workspaceInfo.uuid ? { ...workspace, status: 'DEREGISTERED' } : workspace
         ),
       }));
-      setSuccess(`Unsubscribed ${workspaceInfo.name}. Billing and messaging have been stopped.`);
+      setSuccess(`Deregistered ${workspaceInfo.name}. Billing and messaging have been stopped.`);
     } catch (err) {
-      setError(err.message || 'Failed to unsubscribe workspace');
+      setError(err.message || 'Failed to deregister workspace');
     } finally {
       setLoading(false);
     }
@@ -386,7 +386,7 @@ export const WhatsAppOnboarding = ({ businessCode, businessInfo, isSelfManagedBi
           onConfigureNew={() => setCurrentStep('business-info')}
           onCheckStatus={handleCheckStatus}
           onResumeOnboarding={handleResumeOnboarding}
-          onUnsubscribeWorkspace={onUnsubscribeWorkspace ? handleUnsubscribeWorkspace : undefined}
+          onDeregisterWorkspace={onDeregisterWorkspace ? handleDeregisterWorkspace : undefined}
           loading={loading}
         />
       ) : (
