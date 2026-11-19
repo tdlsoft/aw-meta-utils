@@ -308,7 +308,7 @@ export const WhatsAppOnboarding = ({ businessCode, businessInfo, isSelfManagedBi
     setSuccess(null);
 
     try {
-      const result = await onDeregisterWorkspace(workspaceInfo);
+      const result = await onUnsubscribeWorkspace(workspaceInfo);
       if (result?.cancelled) return;
       if (result?.success === false || !['DEREGISTERED', 'ALREADY_DEREGISTERED'].includes(result?.status)) {
         throw new Error(result?.error || 'Failed to deregister workspace');
