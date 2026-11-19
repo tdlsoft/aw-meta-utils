@@ -2,14 +2,52 @@
  * WhatsApp Business & Workspace Registration SDK
  * Manages the full registration flow for both Meta and AiSensy BSP types
  */
+
+/**
+ * @typedef {Object} MetaBspOnboardingHandlers
+ * @property {() => void | Promise<void>} [onTenantOnboardingStarted]
+ * @property {(params: { businessCode: string, workspaceUuid: string }) => Promise<*>} [onUnregisterDepartment]
+ *   Performs department deregistration through the host app's authenticated API client.
+ * @property {(error: Error) => void} [onError]
+ * @property {() => void} [onCancel]
+ */
+
 export class MetaBspOnboardingSdk {
   /**
-   * @param {WhatsAppBusinessRegistrationHandlers} handlers
+   * @param {MetaBspOnboardingHandlers} handlers
    */
   constructor(handlers = {}) {
     this.onTenantOnboardingStarted = handlers.onTenantOnboardingStarted ?? (() => {});
+    this._onUnregisterDepartment = handlers.onUnregisterDepartment;
     this._onError = handlers.onError ?? ((err) => console.error('[whatsapp-registration]', err));
     this._onCancel = handlers.onCancel ?? (() => {});
+  }
+
+  /**
+   * Delegate department deregistration to the host app's authenticated API client.
+   * @param {{ businessCode: string, workspaceUuid: string }} params
+   * @returns {Promise<*>}
+   */
+  async unregisterDepartment(params = {}) {
+    const { businessCode, workspaceUuid } = params || {};
+    if (!businessCode || !workspaceUuid) {
+      const error = new Error('unregisterDepartment() requires { businessCode, workspaceUuid }');
+      this._onError(error);
+      throw error;
+    }
+
+    if (typeof this._onUnregisterDepartment !== 'function') {
+      const error = new Error('onUnregisterDepartment handler is required to unregister a department');
+      this._onError(error);
+      throw error;
+    }
+
+    try {
+      return await this._onUnregisterDepartment({ businessCode, workspaceUuid });
+    } catch (error) {
+      this._onError(error);
+      throw error;
+    }
   }
 
   /**

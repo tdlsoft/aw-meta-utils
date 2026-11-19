@@ -125,7 +125,7 @@ const WhatsAppSignup = ({
             </div> */}
           </div>
 
-          {/* Group 2: Workspace Create */}
+          {/* Group 2: Department Create */}
           <div className="p-2 border border-gray-200 rounded-xl bg-white shadow-sm space-y-2">
             <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-100 pb-2">Department Information</h2>
             <div className="grid grid-cols-2 gap-4">
