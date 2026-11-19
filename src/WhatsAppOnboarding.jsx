@@ -21,7 +21,7 @@ const TIMEZONES = [
  * 3. Onboarding History (Workspace List)
  * Logic and state orchestration for the WhatsApp onboarding flow.
  */
-export const WhatsAppOnboarding = ({ businessCode, businessInfo, isSelfManagedBilling, onTriggerOnboardingFlow, getOnboardingStatus, onDeregisterWorkspace }) => {
+export const WhatsAppOnboarding = ({ businessCode, businessInfo, isSelfManagedBilling, onTriggerOnboardingFlow, getOnboardingStatus, unsubscribeWorkspace }) => {
   // Start with a loading state to check for existing workspaces
   const [currentStep, setCurrentStep] = useState('loading');
   const [formData, setFormData] = useState({
@@ -302,7 +302,7 @@ export const WhatsAppOnboarding = ({ businessCode, businessInfo, isSelfManagedBi
   };
 
   const handleDeregisterWorkspace = async (workspaceInfo) => {
-    if (!onDeregisterWorkspace) return;
+    if (!unsubscribeWorkspace) return;
     setLoading(true);
     setError(null);
     setSuccess(null);
@@ -386,7 +386,7 @@ export const WhatsAppOnboarding = ({ businessCode, businessInfo, isSelfManagedBi
           onConfigureNew={() => setCurrentStep('business-info')}
           onCheckStatus={handleCheckStatus}
           onResumeOnboarding={handleResumeOnboarding}
-          onDeregisterWorkspace={onDeregisterWorkspace ? handleDeregisterWorkspace : undefined}
+          onDeregisterWorkspace={unsubscribeWorkspace ? handleDeregisterWorkspace : undefined}
           loading={loading}
         />
       ) : (
